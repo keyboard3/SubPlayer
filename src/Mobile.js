@@ -1,18 +1,10 @@
-import styled from 'styled-components';
 import { Translate } from 'react-i18nify';
-
-const Style = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-`;
+import './Mobile.scss';
 
 export default function Mobile() {
     return (
-        <Style>
+        <div className='mobile'>
             <Translate value="MOBILE_TIP" />
-        </Style>
+        </div>
     );
 }

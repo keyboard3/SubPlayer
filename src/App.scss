@@ -1,0 +1,25 @@
+.app {
+  height: 100%;
+  width: 100%;
+
+  .main {
+    display: flex;
+    height: calc(100% - 200px);
+
+    .player {
+      flex: 1;
+    }
+
+    .subtitles {
+      width: 250px;
+    }
+
+    .tool {
+      width: 300px;
+    }
+  }
+
+  .footer {
+    height: 200px;
+  }
+}

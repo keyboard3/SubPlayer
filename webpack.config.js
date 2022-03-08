@@ -13,9 +13,6 @@ module.exports = {
     clean: true
   },
   devtool: 'source-map',
-  // devServer: {
-  //   static: './dist',
-  // },
   module: {
     rules: [
       {
@@ -36,7 +33,11 @@ module.exports = {
       {
         test: /\.(png|mp3|mp4)$/,
         type: 'asset/resource',
-      }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
     ]
   },
   plugins: [

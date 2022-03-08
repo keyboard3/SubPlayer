@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import DT from 'duration-time-conversion';
 import React, { useState, useEffect, useCallback, createRef, memo } from 'react';
 import WFPlayer from 'wfplayer';
@@ -6,110 +5,7 @@ import clamp from 'lodash/clamp';
 import throttle from 'lodash/throttle';
 import Timeline from './Timeline';
 import Metronome from './Metronome';
-
-const Style = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-
-    .progress {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -12px;
-        z-index: 11;
-        width: 100%;
-        height: 12px;
-        user-select: none;
-        border-top: 1px solid rgb(255 255 255 / 20%);
-        background-color: rgb(0 0 0 / 50%);
-
-        .bar {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 0%;
-            height: 100%;
-            display: inline-block;
-            background-color: #730000;
-            overflow: hidden;
-
-            .handle {
-                position: absolute;
-                right: 0;
-                top: 0;
-                bottom: 0;
-                width: 10px;
-                cursor: ew-resize;
-                background-color: #ff9800;
-            }
-        }
-
-        .subtitle {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-
-            span {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                height: 100%;
-                background-color: rgb(255 255 255 / 20%);
-            }
-        }
-    }
-
-    .duration {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -40px;
-        z-index: 12;
-        width: 100%;
-        font-size: 18px;
-        color: rgb(255 255 255 / 75%);
-        text-shadow: 0 1px 2px rgb(0 0 0 / 75%);
-        text-align: center;
-        user-select: none;
-        pointer-events: none;
-    }
-
-    .waveform {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        user-select: none;
-        pointer-events: none;
-    }
-
-    .grab {
-        position: relative;
-        z-index: 11;
-        cursor: grab;
-        height: 20%;
-        user-select: none;
-        background-color: rgb(33 150 243 / 20%);
-        border-top: 1px solid rgb(33 150 243 / 30%);
-        border-bottom: 1px solid rgb(33 150 243 / 30%);
-
-        &.grabbing {
-            cursor: grabbing;
-        }
-    }
-`;
+import "./Footer.scss";
 
 const Waveform = memo(
     ({ player, setWaveform, setRender }) => {
@@ -246,18 +142,18 @@ const Progress = (props) => {
             <div className="subtitle">
                 {props.subtitle.length <= 200
                     ? props.subtitle.map((item, index) => {
-                          const { duration } = props.player;
-                          return (
-                              <span
-                                  key={index}
-                                  className="item"
-                                  style={{
-                                      left: `${(item.startTime / duration) * 100}%`,
-                                      width: `${(item.duration / duration) * 100}%`,
-                                  }}
-                              ></span>
-                          );
-                      })
+                        const { duration } = props.player;
+                        return (
+                            <span
+                                key={index}
+                                className="item"
+                                style={{
+                                    left: `${(item.startTime / duration) * 100}%`,
+                                    width: `${(item.duration / duration) * 100}%`,
+                                }}
+                            ></span>
+                        );
+                    })
                     : null}
             </div>
         </div>
@@ -316,7 +212,7 @@ export default function Footer(props) {
     }, [onWheel]);
 
     return (
-        <Style className="footer" ref={$footer}>
+        <div className="footer" ref={$footer}>
             {props.player ? (
                 <React.Fragment>
                     <Progress {...props} />
@@ -327,6 +223,6 @@ export default function Footer(props) {
                     <Timeline {...props} render={render} />
                 </React.Fragment>
             ) : null}
-        </Style>
+        </div>
     );
 }

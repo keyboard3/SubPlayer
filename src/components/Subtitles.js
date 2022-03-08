@@ -1,52 +1,8 @@
-import styled from 'styled-components';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Table } from 'react-virtualized';
 import unescape from 'lodash/unescape';
 import debounce from 'lodash/debounce';
-
-const Style = styled.div`
-    position: relative;
-    box-shadow: 0px 5px 25px 5px rgb(0 0 0 / 80%);
-    background-color: rgb(0 0 0 / 100%);
-
-    .ReactVirtualized__Table {
-        .ReactVirtualized__Table__Grid {
-            outline: none;
-        }
-
-        .ReactVirtualized__Table__row {
-            .item {
-                height: 100%;
-                padding: 5px;
-
-                .textarea {
-                    border: none;
-                    width: 100%;
-                    height: 100%;
-                    color: #fff;
-                    font-size: 12px;
-                    padding: 10px;
-                    text-align: center;
-                    background-color: rgba(255, 255, 255, 0.05);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    transition: all 0.2s ease;
-                    resize: none;
-                    outline: none;
-
-                    &.highlight {
-                        background-color: rgb(0 87 158);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
-                    }
-
-                    &.illegal {
-                        background-color: rgb(123 29 0);
-                        border: 1px solid rgba(255, 255, 255, 0.3);
-                    }
-                }
-            }
-        }
-    }
-`;
+import "./Subtitles.scss";
 
 export default function Subtitles({ currentIndex, subtitle, checkSub, player, updateSub }) {
     const [height, setHeight] = useState(100);
@@ -65,7 +21,7 @@ export default function Subtitles({ currentIndex, subtitle, checkSub, player, up
     }, [resize]);
 
     return (
-        <Style className="subtitles">
+        <div className="subtitles">
             <Table
                 headerHeight={40}
                 width={250}
@@ -113,6 +69,6 @@ export default function Subtitles({ currentIndex, subtitle, checkSub, player, up
                     );
                 }}
             ></Table>
-        </Style>
+        </div>
     );
 }

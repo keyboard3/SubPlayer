@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import languages from '../libs/languages';
 import { t, Translate } from 'react-i18nify';
 import React, { useState, useCallback } from 'react';
@@ -8,234 +7,7 @@ import sub2ass from '../libs/readSub/sub2ass';
 import googleTranslate from '../libs/googleTranslate';
 import FFmpeg from '@ffmpeg/ffmpeg';
 import SimpleFS from '@forlagshuset/simple-fs';
-
-const Style = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-bottom: 20px;
-    position: relative;
-    overflow: hidden;
-    background-color: rgb(0 0 0 / 100%);
-    border-left: 1px solid rgb(255 255 255 / 20%);
-
-    .import {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border-bottom: 1px solid rgb(255 255 255 / 20%);
-
-        .btn {
-            position: relative;
-            opacity: 0.85;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 35px;
-            width: 48%;
-            border-radius: 3px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            background-color: #3f51b5;
-            transition: all 0.2s ease 0s;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-
-        .file {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
-    }
-
-    .burn {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border-bottom: 1px solid rgb(255 255 255 / 20%);
-
-        .btn {
-            position: relative;
-            opacity: 0.85;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 35px;
-            width: 100%;
-            border-radius: 3px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            background-color: #673ab7;
-            transition: all 0.2s ease 0s;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
-
-    .export {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border-bottom: 1px solid rgb(255 255 255 / 20%);
-
-        .btn {
-            position: relative;
-            opacity: 0.85;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 35px;
-            width: 31%;
-            border-radius: 3px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            background-color: #009688;
-            transition: all 0.2s ease 0s;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
-
-    .operate {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border-bottom: 1px solid rgb(255 255 255 / 20%);
-
-        .btn {
-            position: relative;
-            opacity: 0.85;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 35px;
-            width: 48%;
-            border-radius: 3px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            background-color: #009688;
-            transition: all 0.2s ease 0s;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
-
-    .translate {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-        border-bottom: 1px solid rgb(255 255 255 / 20%);
-
-        select {
-            width: 65%;
-            outline: none;
-            padding: 0 5px;
-            border-radius: 3px;
-        }
-
-        .btn {
-            opacity: 0.85;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 35px;
-            width: 33%;
-            border-radius: 3px;
-            color: #fff;
-            cursor: pointer;
-            font-size: 13px;
-            background-color: #673ab7;
-            transition: all 0.2s ease 0s;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
-
-    .hotkey {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-
-        span {
-            width: 49%;
-            font-size: 13px;
-            padding: 5px 0;
-            border-radius: 3px;
-            text-align: center;
-            color: rgb(255 255 255 / 75%);
-            background-color: rgb(255 255 255 / 20%);
-        }
-    }
-
-    .bottom {
-        padding: 10px;
-        a {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgb(255 255 255 / 30%);
-            text-decoration: none;
-
-            .title {
-                color: #ffeb3b;
-                padding: 5px 10px;
-                animation: animation 3s infinite;
-                border-bottom: 1px solid rgb(255 255 255 / 30%);
-            }
-
-            @keyframes animation {
-                50% {
-                    color: #00bcd4;
-                }
-            }
-
-            img {
-                max-width: 100%;
-            }
-        }
-    }
-
-    .progress {
-        position: fixed;
-        left: 0;
-        top: 0;
-        right: 0;
-        z-index: 9;
-        height: 2px;
-        background-color: rgb(0 0 0 / 50%);
-
-        span {
-            display: inline-block;
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 0;
-            height: 100%;
-            background-color: #ff9800;
-            transition: all 0.2s ease 0s;
-        }
-    }
-`;
+import './Tool.scss';
 
 FFmpeg.createFFmpeg({ log: true }).load();
 const fs = new SimpleFS.FileSystem();
@@ -473,7 +245,7 @@ export default function Header({
     }, [subtitle, setLoading, formatSub, setSubtitle, translate, notify]);
 
     return (
-        <Style className="tool">
+        <div className="tool">
             <div className="top">
                 <div className="import">
                     <div className="btn">
@@ -540,12 +312,6 @@ export default function Header({
                     </span>
                 </div>
             </div>
-            <div className="bottom">
-                <a href="https://online.aimu-app.com/">
-                    <div className="title">全新字幕编辑器来了，点击这里体验</div>
-                    <img src="/aimu.png" alt="aimu" />
-                </a>
-            </div>
-        </Style>
+        </div>
     );
 }

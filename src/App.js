@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import NotificationSystem from 'react-notification-system';
 import DT from 'duration-time-conversion';
 import isEqual from 'lodash/isEqual';
-import styled from 'styled-components';
 import Tool from './components/Tool';
 import Subtitles from './components/Subtitles';
 import Player from './components/Player';
@@ -11,32 +10,7 @@ import Loading from './components/Loading';
 import ProgressBar from './components/ProgressBar';
 import { getKeyCode } from './utils';
 import Sub from './libs/Sub';
-
-const Style = styled.div`
-    height: 100%;
-    width: 100%;
-
-    .main {
-        display: flex;
-        height: calc(100% - 200px);
-
-        .player {
-            flex: 1;
-        }
-
-        .subtitles {
-            width: 250px;
-        }
-
-        .tool {
-            width: 300px;
-        }
-    }
-
-    .footer {
-        height: 200px;
-    }
-`;
+import './App.scss';
 
 export default function App({ defaultLang }) {
     const subtitleHistory = useRef([]);
@@ -306,7 +280,7 @@ export default function App({ defaultLang }) {
     };
 
     return (
-        <Style>
+        <div className='app'>
             <div className="main">
                 <Player {...props} />
                 <Subtitles {...props} />
@@ -316,6 +290,6 @@ export default function App({ defaultLang }) {
             {loading ? <Loading loading={loading} /> : null}
             {processing > 0 && processing < 100 ? <ProgressBar processing={processing} /> : null}
             <NotificationSystem ref={notificationSystem} allowHTML={true} />
-        </Style>
+        </div>
     );
 }
