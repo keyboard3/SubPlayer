@@ -1,46 +1,55 @@
 {
-  "name": "subplayer",
-  "version": "3.0.0",
-  "private": true,
-  "dependencies": {
-    "@ffmpeg/ffmpeg": "^0.10.1",
-    "@forlagshuset/simple-fs": "^0.5.0",
-    "core-js": "^3.18.0",
-    "duration-time-conversion": "^1.0.5",
-    "lodash": "^4.17.21",
-    "normalize.css": "^8.0.1",
-    "option-validator": "^2.0.6",
-    "react": "^17.0.2",
-    "react-contextmenu": "^2.14.0",
-    "react-dom": "^17.0.2",
-    "react-i18nify": "^4.2.1",
-    "react-notification-system": "^0.4.0",
-    "react-scripts": "4.0.3",
-    "react-textarea-autosize": "^8.3.3",
-    "react-virtualized": "^9.22.3",
-    "styled-components": "^5.3.1",
-    "wfplayer": "^2.1.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf docs && mv build docs"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "subplayer",
+    "version": "3.0.0",
+    "private": true,
+    "dependencies": {
+        "@ffmpeg/ffmpeg": "^0.10.1",
+        "@forlagshuset/simple-fs": "^0.5.0",
+        "core-js": "^3.18.0",
+        "duration-time-conversion": "^1.0.5",
+        "lodash": "^4.17.21",
+        "normalize.css": "^8.0.1",
+        "option-validator": "^2.0.6",
+        "react": "^17.0.2",
+        "react-contextmenu": "^2.14.0",
+        "react-dom": "^17.0.2",
+        "react-i18nify": "^4.2.1",
+        "react-notification-system": "^0.4.0",
+        "react-textarea-autosize": "^8.3.3",
+        "react-virtualized": "^9.22.3",
+        "styled-components": "^5.3.1",
+        "wfplayer": "^2.1.0"
+    },
+    "scripts": {
+        "start": "webpack serve --open chrome",
+        "build": "webpack"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/core": "^7.17.5",
+        "@babel/preset-env": "^7.16.11",
+        "@babel/preset-react": "^7.16.7",
+        "babel-loader": "^8.2.3",
+        "copy-webpack-plugin": "^10.2.4",
+        "html-webpack-plugin": "^5.5.0",
+        "webpack": "^5.70.0",
+        "webpack-cli": "^4.9.2"
+    }
 }
