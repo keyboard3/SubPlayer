@@ -1,7 +1,6 @@
 import 'core-js';
 import 'normalize.css';
 import './libs/contextmenu.css';
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { isMobile } from './utils';
 import { setLocale, setTranslations } from 'react-i18nify';
@@ -12,7 +11,7 @@ import './global.scss';
 
 setTranslations(i18n);
 const language = navigator.language.toLowerCase();
-const defaultLang = i18n[language] ? language : 'en';
+const defaultLang = i18n[language as keyof typeof i18n] ? language : 'en';
 setLocale(defaultLang);
 
 ReactDOM.render(

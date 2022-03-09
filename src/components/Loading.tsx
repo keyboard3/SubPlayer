@@ -1,4 +1,3 @@
-import React from 'react';
 import { t } from 'react-i18nify';
 import './Loading.scss';
 

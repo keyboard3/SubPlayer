@@ -6,8 +6,8 @@ import { isPlaying } from '../utils';
 import "./Player.scss";
 
 const VideoWrap = memo(
-    ({ setPlayer, setCurrentTime, setPlaying }) => {
-        const $video = createRef();
+    ({ setPlayer, setCurrentTime, setPlaying }: any) => {
+        const $video = createRef<any>();
 
         useEffect(() => {
             setPlayer($video.current);
@@ -32,7 +32,7 @@ const VideoWrap = memo(
             }
         }, [$video]);
 
-        return <video onClick={onClick} src="/sample.mp4?t=1" ref={$video} />;
+        return <video onClick={onClick} src="/sample.mp4" ref={$video} />;
     },
     () => true,
 );
@@ -41,11 +41,11 @@ export default function Player(props) {
     const [currentSub, setCurrentSub] = useState(null);
     const [focusing, setFocusing] = useState(false);
     const [inputItemCursor, setInputItemCursor] = useState(0);
-    const $player = createRef();
+    const $player = createRef<any>();
 
     useEffect(() => {
-        if ($player.current && props.player && !backlight.state) {
-            backlight.state = true;
+        if ($player.current && props.player && !backlight.prototype.state) {
+            backlight.prototype.state = true;
             backlight($player.current, props.player);
         }
     }, [$player, props.player]);

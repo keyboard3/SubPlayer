@@ -1,11 +1,12 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",
   entry: {
-    app: "./src/index.js"
+    app: "./src/index.tsx"
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -13,18 +14,15 @@ module.exports = {
     clean: true
   },
   devtool: 'source-map',
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.tsx?$/,
         exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ["@babel/plugin-transform-react-jsx"]
-          }
-        }
+        use: 'ts-loader?transpileOnly=true'
       },
       {
         test: /\.css$/,
@@ -41,6 +39,9 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      React: 'react',
+    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html"
     }),

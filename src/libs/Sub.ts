@@ -2,6 +2,10 @@ import clamp from 'lodash/clamp';
 import DT from 'duration-time-conversion';
 
 export default class Sub {
+    start: string;
+    end: string;
+    text: string;
+    text2: string;
     constructor(obj) {
         this.start = obj.start;
         this.end = obj.end;

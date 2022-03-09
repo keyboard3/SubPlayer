@@ -8,8 +8,8 @@ import Metronome from './Metronome';
 import "./Footer.scss";
 
 const Waveform = memo(
-    ({ player, setWaveform, setRender }) => {
-        const $waveform = createRef();
+    ({ player, setWaveform, setRender }: any) => {
+        const $waveform = createRef<any>();
 
         useEffect(() => {
             [...WFPlayer.instances].forEach((item) => item.destroy());
@@ -176,7 +176,7 @@ const Duration = (props) => {
 };
 
 export default function Footer(props) {
-    const $footer = createRef();
+    const $footer = createRef<any>();
     const [render, setRender] = useState({
         padding: 2,
         duration: 10,

@@ -98,7 +98,7 @@ export default function App({ defaultLang }) {
         (sub) => {
             const index = hasSub(sub);
             if (index < 0) return;
-            const subs = copySubs();
+            const subs = copySubs() as Sub[];
             subs.splice(index, 1);
             setSubtitle(subs);
         },
@@ -107,8 +107,8 @@ export default function App({ defaultLang }) {
 
     const addSub = useCallback(
         (index, sub) => {
-            const subs = copySubs();
-            subs.splice(index, 0, formatSub(sub));
+            const subs = copySubs() as Sub[];
+            subs.splice(index, 0, formatSub(sub) as Sub);
             setSubtitle(subs);
         },
         [copySubs, setSubtitle, formatSub],
@@ -119,7 +119,7 @@ export default function App({ defaultLang }) {
             const index = hasSub(sub);
             if (index < 0) return;
             const subs = copySubs();
-            const subClone = formatSub(sub);
+            const subClone = formatSub(sub) as Sub;
             Object.assign(subClone, obj);
             if (subClone.check) {
                 subs[index] = subClone;
@@ -133,7 +133,7 @@ export default function App({ defaultLang }) {
         (sub) => {
             const index = hasSub(sub);
             if (index < 0) return;
-            const subs = copySubs();
+            const subs = copySubs() as Sub[];
             const next = subs[index + 1];
             if (!next) return;
             const merge = newSub({
@@ -152,14 +152,14 @@ export default function App({ defaultLang }) {
         (sub, start) => {
             const index = hasSub(sub);
             if (index < 0 || !sub.text || !start) return;
-            const subs = copySubs();
+            const subs = copySubs() as Sub[];
             const text1 = sub.text.slice(0, start).trim();
             const text2 = sub.text.slice(start).trim();
             if (!text1 || !text2) return;
-            const splitDuration = (sub.duration * (start / sub.text.length)).toFixed(3);
+            const splitDuration = parseFloat((sub.duration * (start / sub.text.length)).toFixed(3));
             if (splitDuration < 0.2 || sub.duration - splitDuration < 0.2) return;
             subs.splice(index, 1);
-            const middleTime = DT.d2t(sub.startTime + parseFloat(splitDuration));
+            const middleTime = DT.d2t(sub.startTime + splitDuration);
             subs.splice(
                 index,
                 0,

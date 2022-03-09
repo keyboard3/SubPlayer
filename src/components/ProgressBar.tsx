@@ -1,4 +1,3 @@
-import React from 'react';
 import './ProgressBar.scss';
 
 export default function Component({ processing }) {

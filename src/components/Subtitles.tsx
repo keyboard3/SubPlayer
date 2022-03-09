@@ -13,8 +13,8 @@ export default function Subtitles({ currentIndex, subtitle, checkSub, player, up
 
     useEffect(() => {
         resize();
-        if (!resize.init) {
-            resize.init = true;
+        if (!resize.prototype.init) {
+            resize.prototype.init = true;
             const debounceResize = debounce(resize, 500);
             window.addEventListener('resize', debounceResize);
         }

@@ -34,16 +34,16 @@ let lastDiffX = 0;
 let isDroging = false;
 
 export default React.memo(
-    function ({ player, subtitle, render, currentTime, checkSub, removeSub, hasSub, updateSub, mergeSub }) {
-        const $blockRef = React.createRef();
-        const $subsRef = React.createRef();
+    function ({ player, subtitle, render, currentTime, checkSub, removeSub, hasSub, updateSub, mergeSub }: any) {
+        const $blockRef = React.createRef<any>();
+        const $subsRef = React.createRef<any>();
         const currentSubs = getCurrentSubs(subtitle, render.beginTime, render.duration);
         const gridGap = document.body.clientWidth / render.gridNum;
         const currentIndex = currentSubs.findIndex(
             (item) => item.startTime <= currentTime && item.endTime > currentTime,
         );
 
-        const onMouseDown = (sub, event, type) => {
+        const onMouseDown = (sub, event, type?: any) => {
             lastSub = sub;
             if (event.button !== 0) return;
             isDroging = true;
