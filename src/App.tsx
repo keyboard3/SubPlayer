@@ -18,6 +18,7 @@ import './libs/contextmenu.css';
 import 'core-js';
 import 'normalize.css';
 import covertToAss from './libs/readSub/sub2ass';
+import { TopTool } from './components/Tool';
 setTranslations(i18n);
 setLocale('zh');
 
@@ -290,20 +291,22 @@ const App = forwardRef((appProps: PlayerEditorProps, ref) => {
         mergeSub,
         splitSub,
     };
-
     return (
-        <div id='sub-player' className='app'>
-            <div className="main">
-                <div className='content'>
-                    <Player {...props} />
-                    <Tabs {...props} />
+        <div className='app-wrapper'>
+            <TopTool {...props} />
+            <div id='sub-player' className='app'>
+                <div className="main">
+                    <div className='content'>
+                        <Player {...props} />
+                        <Tabs {...props} />
+                    </div>
+                    <Subtitles {...props} />
                 </div>
-                <Subtitles {...props} />
+                <Footer {...props} />
+                {loading ? <Loading loading={loading} /> : null}
+                {processing > 0 && processing < 100 ? <ProgressBar processing={processing} /> : null}
+                <NotificationSystem ref={notificationSystem} allowHTML={true} />
             </div>
-            <Footer {...props} />
-            {loading ? <Loading loading={loading} /> : null}
-            {processing > 0 && processing < 100 ? <ProgressBar processing={processing} /> : null}
-            <NotificationSystem ref={notificationSystem} allowHTML={true} />
         </div>
     );
 })

@@ -20,13 +20,15 @@
     .subtitles {
       width: 400px;
     }
-
-    .tool {
-      width: 300px;
-    }
   }
 
   .footer {
     height: 200px;
   }
+}
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 }

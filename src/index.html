@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>SubPlayer - An online subtitle editor</title>
-    <meta name="theme-color" content="#000000" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="SubPlayer is an online subtitle editor" />
-    <meta
-      name="keywords"
-      content="SubPlayer, online, subtitle, editor, vtt, srt, ass"
-    />
-    <style>
+
+<head>
+  <meta charset="utf-8" />
+  <title>SubPlayer - An online subtitle editor</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="SubPlayer is an online subtitle editor" />
+  <meta name="keywords" content="SubPlayer, online, subtitle, editor, vtt, srt, ass" />
+  <style>
+    .github-corner:hover .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+
+    @keyframes octocat-wave {
+
+      0%,
+      100% {
+        transform: rotate(0);
+      }
+
+      20%,
+      60% {
+        transform: rotate(-25deg);
+      }
+
+      40%,
+      80% {
+        transform: rotate(10deg);
+      }
+    }
+
+    @media (max-width: 500px) {
       .github-corner:hover .octo-arm {
+        animation: none;
+      }
+
+      .github-corner .octo-arm {
         animation: octocat-wave 560ms ease-in-out;
       }
+    }
+  </style>
+</head>
 
-      @keyframes octocat-wave {
-        0%,
-        100% {
-          transform: rotate(0);
-        }
+<body>
+  <div id="root"></div>
+</body>
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js" crossorigin="anonymous"></script>
 
-        20%,
-        60% {
-          transform: rotate(-25deg);
-        }
-
-        40%,
-        80% {
-          transform: rotate(10deg);
-        }
-      }
-
-      @media (max-width: 500px) {
-        .github-corner:hover .octo-arm {
-          animation: none;
-        }
-
-        .github-corner .octo-arm {
-          animation: octocat-wave 560ms ease-in-out;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
 </html>

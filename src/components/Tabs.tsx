@@ -1,14 +1,30 @@
 import './Tabs.scss';
 import { CompactPicker } from 'react-color';
 import { useState } from 'react';
+import Tool from './Tool';
 interface LocalProps { config: Config, setConfig: (config: Config) => void }
-export default (props: LocalProps) => {
-
+type TabType = "style" | "tool";
+export default (props: LocalProps & any) => {
+  const [type, setType] = useState<TabType>('style');
   return (
     <div className='tabs-inner'>
       <div className='tabs-header'>
-        <div className='tabs-header-item'>样式</div>
+        <div className={tabItemClass('style', type)} onClick={setType.bind(this, 'style')}>样式</div>
+        <div className={tabItemClass('tool', type)} onClick={setType.bind(this, 'tool')}>工具</div>
       </div>
+      {(() => {
+        if (type == "style") return renderStyle();
+        else if (type == "tool") return renderTool();
+        return null;
+      })()}
+    </div>
+  );
+  function tabItemClass(originalType, type) {
+    if (originalType == type) return "tabs-header-item tabs-item-active";
+    return "tabs-header-item";
+  }
+  function renderStyle() {
+    return (
       <div className='tabs-content'>
         <div className='tabs-item'>
           <div className='item-title'>英文字幕:</div>
@@ -24,10 +40,12 @@ export default (props: LocalProps) => {
           <ColorBox  {...props} label={'文字颜色'} propertyKey={'secondaryColor'} />
           <SecondaryFontSize {...props} />
         </div>
-        <div style={{ height: 20 }}></div>
       </div>
-    </div>
-  );
+    );
+  }
+  function renderTool() {
+    return <div className='tabs-content'><Tool {...props} /></div>
+  }
 }
 function SubtitleBox({ config, setConfig }: LocalProps) {
   return <input type='checkbox' checked={config.visibleText1} onChange={(event => {

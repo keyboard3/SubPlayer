@@ -15,7 +15,7 @@ const toSubTime = (str) => {
     n.unshift((Math.floor(sx / 3600) % 60).toString());
     return n.slice(0, 3).join(':') + '.' + n[3];
 };
-export default function covertToAss(sub: Subtitle[], config: Config) {
+export default function covertToAss(sub: Subtitle[], config: Config = defaultConfig) {
     return `
 [Script Info]
 Synch Point:1

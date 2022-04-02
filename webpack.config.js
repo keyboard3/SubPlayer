@@ -2,7 +2,6 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
-
 module.exports = {
   mode: "development",
   entry: {
@@ -13,8 +12,17 @@ module.exports = {
     filename: 'bundle.js',
     clean: true
   },
+  devServer: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+  },
   devtool: 'source-map',
   resolve: {
+    fallback: {
+      "@ffmpeg/ffmpeg": false
+    },
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {

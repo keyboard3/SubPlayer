@@ -44,8 +44,8 @@ function Editor() {
     return (
         <SubPlayerEditor
             ref={ref}
-            url={"https://subplayer.js.org/sample.mp4"}
-            audio={"https://subplayer.js.org/sample.mp3"}
+            url={"/sample.mp4"}
+            audio={"/sample.mp3"}
             subtitles={subtitle}
             config={config}
             onSubtitleChange={(subtitle) => {
