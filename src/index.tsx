@@ -1,20 +1,59 @@
-import 'core-js';
-import 'normalize.css';
-import './libs/contextmenu.css';
 import ReactDOM from 'react-dom';
-import { isMobile } from './utils';
-import { setLocale, setTranslations } from 'react-i18nify';
-import i18n from './i18n';
-import App from './App';
-import Mobile from './Mobile';
+import Loading from './components/Loading';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import SubPlayerEditor from './App';
 import './global.scss';
-
-setTranslations(i18n);
-const language = navigator.language.toLowerCase();
-const defaultLang = i18n[language as keyof typeof i18n] ? language : 'en';
-setLocale(defaultLang);
-
+import defaultConfig from './libs/config';
 ReactDOM.render(
-    isMobile ? <Mobile /> : <App defaultLang={defaultLang} />,
-    document.getElementById('root'),
+    <Suspense fallback={<Loading loading={true} />}>
+        <Editor />
+    </Suspense>
+    , document.getElementById('root'),
 );
+
+function Editor() {
+    const [config, setOriginalConfig] = useState<Config>(defaultConfig);
+    const [subtitle, setSubtitleOriginal] = useState<Subtitle[]>([]);
+    const ref = useRef();
+    console.log("ref.current", ref.current);
+    useEffect(() => {
+        //会缓存获取的demo字幕
+        const localSubtitleString = window.localStorage.getItem('subtitle');
+        const fetchSubtitle = () =>
+            fetch('https://subplayer.js.org/sample.json')
+                .then((res) => res.json())
+                .then((res) => {
+                    setSubtitleOriginal(res);
+                });
+        //根据缓存是否存在来从远端获取字幕
+        if (localSubtitleString) {
+            try {
+                const localSubtitle = JSON.parse(localSubtitleString);
+                if (localSubtitle.length) {
+                    setSubtitleOriginal(localSubtitle);
+                } else {
+                    fetchSubtitle();
+                }
+            } catch (error) {
+                fetchSubtitle();
+            }
+        } else {
+            fetchSubtitle();
+        }
+    }, [setSubtitleOriginal]);
+    return (
+        <SubPlayerEditor
+            ref={ref}
+            url={"https://subplayer.js.org/sample.mp4"}
+            audio={"https://subplayer.js.org/sample.mp3"}
+            subtitles={subtitle}
+            config={config}
+            onSubtitleChange={(subtitle) => {
+                setSubtitleOriginal(subtitle);
+            }}
+            onConfigChange={(config) => {
+                setOriginalConfig(config)
+            }}
+        />
+    );
+}

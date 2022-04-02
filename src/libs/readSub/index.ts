@@ -13,7 +13,7 @@ export function url2sub(url) {
         $video.appendChild($track);
         $track.onload = () => {
             resolve(
-                Array.from($track.track.cues).map((item) => {
+                Array.from($track.track.cues).map((item: any) => {
                     const start = DT.d2t(item.startTime);
                     const end = DT.d2t(item.endTime);
                     const text = item.text;
@@ -38,15 +38,16 @@ export function file2sub(file) {
         const reader = new FileReader();
         reader.onload = async () => {
             const ext = getExt(file.name);
+            const result = reader.result as string;
             if (ext === 'json') {
                 try {
-                    const sub = JSON.parse(reader.result).map((item) => new Sub(item));
+                    const sub = JSON.parse(result).map((item) => new Sub(item));
                     resolve(sub);
                 } catch (error) {
                     reject(error);
                 }
             } else {
-                const text = reader.result.replace(/{[\s\S]*?}/g, '');
+                const text = result.replace(/{[\s\S]*?}/g, '');
                 switch (ext) {
                     case 'vtt': {
                         const url = vtt2url(text);

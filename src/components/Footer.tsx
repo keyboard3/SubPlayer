@@ -6,14 +6,15 @@ import throttle from 'lodash/throttle';
 import Timeline from './Timeline';
 import Metronome from './Metronome';
 import "./Footer.scss";
-
+/**
+ * 根据mp3画波形
+ */
 const Waveform = memo(
-    ({ player, setWaveform, setRender }: any) => {
+    ({ player, setWaveform, setRender, audio }: any) => {
         const $waveform = createRef<any>();
 
         useEffect(() => {
             [...WFPlayer.instances].forEach((item) => item.destroy());
-
             const waveform = new WFPlayer({
                 scrollable: true,
                 useWorker: false,
@@ -22,7 +23,7 @@ const Waveform = memo(
                 wave: true,
                 pixelRatio: 2,
                 container: $waveform.current,
-                mediaElement: player,
+                mediaElement: document.querySelector('video'),
                 backgroundColor: 'rgba(0, 0, 0, 0)',
                 waveColor: 'rgba(255, 255, 255, 0.2)',
                 progressColor: 'rgba(255, 255, 255, 0.5)',
@@ -33,14 +34,14 @@ const Waveform = memo(
 
             setWaveform(waveform);
             waveform.on('update', setRender);
-            waveform.load('/sample.mp3');
-        }, [player, $waveform, setWaveform, setRender]);
+            waveform.load(audio);
+        }, [audio, player, $waveform, setWaveform, setRender]);
 
         return <div className="waveform" ref={$waveform} />;
     },
     () => true,
 );
-
+//更粗粒度的可拖动的进度条
 const Grab = (props) => {
     const [grabStartX, setGrabStartX] = useState(0);
     const [grabStartTime, setGrabStartTime] = useState(0);
@@ -49,6 +50,7 @@ const Grab = (props) => {
     const onGrabDown = useCallback(
         (event) => {
             if (event.button !== 0) return;
+            console.log("Grab onGrabDown");
             setGrabStartX(event.pageX);
             setGrabStartTime(props.player.currentTime);
             setGrabbing(true);
@@ -86,7 +88,11 @@ const Grab = (props) => {
         <div className={`grab ${grabbing ? 'grabbing' : ''}`} onMouseDown={onGrabDown} onMouseMove={onGrabMove}></div>
     );
 };
-
+/**
+ * 最上面比较细的进度条
+ * @param props 
+ * @returns 
+ */
 const Progress = (props) => {
     const [grabbing, setGrabbing] = useState(false);
 
@@ -103,6 +109,7 @@ const Progress = (props) => {
     const onGrabDown = useCallback(
         (event) => {
             if (event.button !== 0) return;
+            console.log("Progress onGrabDown");
             setGrabbing(true);
         },
         [setGrabbing],
@@ -159,7 +166,11 @@ const Progress = (props) => {
         </div>
     );
 };
-
+/**
+ * 显示时长，当前播放进度/总时长
+ * @param props 
+ * @returns 
+ */
 const Duration = (props) => {
     const getDuration = useCallback((time) => {
         time = time === Infinity ? 0 : time;
@@ -174,7 +185,11 @@ const Duration = (props) => {
         </div>
     );
 };
-
+/**
+ * 显示播放进度，时长，波形，字幕在模型中的位置，可以拖动的时间轴
+ * @param props 
+ * @returns 
+ */
 export default function Footer(props) {
     const $footer = createRef<any>();
     const [render, setRender] = useState({

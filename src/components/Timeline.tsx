@@ -4,6 +4,7 @@ import { Translate } from 'react-i18nify';
 import isEqual from 'lodash/isEqual';
 import DT from 'duration-time-conversion';
 import { getKeyCode } from '../utils';
+import * as KeyCode from 'keycode-js';
 import "./Timeline.scss";
 
 function getCurrentSubs(subs, beginTime, duration) {
@@ -32,7 +33,9 @@ let lastIndex = -1;
 let lastWidth = 0;
 let lastDiffX = 0;
 let isDroging = false;
-
+/**
+ * 在播放的时间线上对字幕进行增删操作
+ */
 export default React.memo(
     function ({ player, subtitle, render, currentTime, checkSub, removeSub, hasSub, updateSub, mergeSub }: any) {
         const $blockRef = React.createRef<any>();
@@ -53,7 +56,7 @@ export default React.memo(
             lastTarget = $subsRef.current.children[lastIndex];
             lastWidth = parseFloat(lastTarget.style.width);
         };
-
+        //双击填充当前字幕时长到左右剩余的时间
         const onDoubleClick = (sub, event) => {
             const $subs = event.currentTarget;
             const index = hasSub(sub);
@@ -143,22 +146,22 @@ export default React.memo(
                 if (sub && lastTarget) {
                     const keyCode = getKeyCode(event);
                     switch (keyCode) {
-                        case 37:
+                        case KeyCode.KEY_LEFT:
                             updateSub(sub, {
                                 start: DT.d2t(sub.startTime - 0.1),
                                 end: DT.d2t(sub.endTime - 0.1),
                             });
                             player.currentTime = sub.startTime - 0.1;
                             break;
-                        case 39:
+                        case KeyCode.KEY_RIGHT:
                             updateSub(sub, {
                                 start: DT.d2t(sub.startTime + 0.1),
                                 end: DT.d2t(sub.endTime + 0.1),
                             });
                             player.currentTime = sub.startTime + 0.1;
                             break;
-                        case 8:
-                        case 46:
+                        case KeyCode.KEY_BACK_SPACE:
+                        case KeyCode.KEY_DELETE:
                             removeSub(sub);
                             break;
                         default:

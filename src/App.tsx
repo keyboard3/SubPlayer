@@ -1,33 +1,57 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef, useImperativeHandle, forwardRef } from 'react';
 import NotificationSystem from 'react-notification-system';
 import DT from 'duration-time-conversion';
 import isEqual from 'lodash/isEqual';
-import Tool from './components/Tool';
-import Subtitles from './components/Subtitles';
+import Tabs from './components/Tabs';
+import Subtitles, { renderSubtitle } from './components/Subtitles';
 import Player from './components/Player';
 import Footer from './components/Footer';
 import Loading from './components/Loading';
 import ProgressBar from './components/ProgressBar';
 import { getKeyCode } from './utils';
+import * as KeyCode from 'keycode-js';
 import Sub from './libs/Sub';
 import './App.scss';
+import { setLocale, setTranslations } from 'react-i18nify';
+import i18n from './i18n';
+import './libs/contextmenu.css';
+import 'core-js';
+import 'normalize.css';
+import covertToAss from './libs/readSub/sub2ass';
+setTranslations(i18n);
+setLocale('zh');
 
-export default function App({ defaultLang }) {
+const App = forwardRef((appProps: PlayerEditorProps, ref) => {
     const subtitleHistory = useRef([]);
     const notificationSystem = useRef(null);
-    const [player, setPlayer] = useState(null);
+    const [player, setPlayer] = useState<Artplayer>(null);
+
     const [loading, setLoading] = useState('');
     const [processing, setProcessing] = useState(0);
-    const [language, setLanguage] = useState(defaultLang);
-    const [subtitle, setSubtitleOriginal] = useState([]);
+    const [language, setLanguage] = useState('zh');
+
     const [waveform, setWaveform] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(-1);
 
+    const { url, poster, audio, config, subtitles: pureSubtitle, onSubtitleChange: setSubtitleOriginal, onConfigChange: setConfig } = appProps;
+    const subtitle = useMemo(() => pureSubtitle.map(item => new Sub(item)), [pureSubtitle]);
+    useImperativeHandle(ref, () => ({
+        covertToAss,
+        destroy: () => {
+            try {
+                player.pause();
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    }));
+    //拷贝创建个新字幕
     const newSub = useCallback((item) => new Sub(item), []);
+    //判断字幕列表中是否存在该字幕对象
     const hasSub = useCallback((sub) => subtitle.indexOf(sub), [subtitle]);
-
+    //拷贝创建一组或一个字幕
     const formatSub = useCallback(
         (sub) => {
             if (Array.isArray(sub)) {
@@ -37,9 +61,9 @@ export default function App({ defaultLang }) {
         },
         [newSub],
     );
-
+    //同上拷贝字幕
     const copySubs = useCallback(() => formatSub(subtitle), [subtitle, formatSub]);
-
+    //将字幕数据设置到页面上，同时写到缓存上
     const setSubtitle = useCallback(
         (newSubtitle, saveToHistory = true) => {
             if (!isEqual(newSubtitle, subtitle)) {
@@ -51,6 +75,7 @@ export default function App({ defaultLang }) {
                 }
                 window.localStorage.setItem('subtitle', JSON.stringify(newSubtitle));
                 setSubtitleOriginal(newSubtitle);
+                appProps.onSubtitleChange(newSubtitle);
             }
         },
         [subtitle, setSubtitleOriginal, formatSub],
@@ -62,12 +87,12 @@ export default function App({ defaultLang }) {
             setSubtitle(subs, false);
         }
     }, [setSubtitle, subtitleHistory]);
-
+    //清空页面字幕和字幕操作历史
     const clearSubs = useCallback(() => {
         setSubtitle([]);
         subtitleHistory.current.length = 0;
     }, [setSubtitle, subtitleHistory]);
-
+    //检查当前字幕是否被选中
     const checkSub = useCallback(
         (sub) => {
             const index = hasSub(sub);
@@ -77,7 +102,7 @@ export default function App({ defaultLang }) {
         },
         [subtitle, hasSub],
     );
-
+    //封装的页面通知提示
     const notify = useCallback(
         (obj) => {
             // https://github.com/igorprado/react-notification-system
@@ -93,7 +118,7 @@ export default function App({ defaultLang }) {
         },
         [notificationSystem],
     );
-
+    // 删除指定那条字幕
     const removeSub = useCallback(
         (sub) => {
             const index = hasSub(sub);
@@ -104,7 +129,7 @@ export default function App({ defaultLang }) {
         },
         [hasSub, copySubs, setSubtitle],
     );
-
+    //添加指定条字幕
     const addSub = useCallback(
         (index, sub) => {
             const subs = copySubs() as Sub[];
@@ -113,7 +138,7 @@ export default function App({ defaultLang }) {
         },
         [copySubs, setSubtitle, formatSub],
     );
-
+    //修改指定条字幕
     const updateSub = useCallback(
         (sub, obj) => {
             const index = hasSub(sub);
@@ -128,7 +153,7 @@ export default function App({ defaultLang }) {
         },
         [hasSub, copySubs, setSubtitle, formatSub],
     );
-
+    //合并字幕是指当前和后面的字幕合并在一起显示，换行且时间区域合并
     const mergeSub = useCallback(
         (sub) => {
             const index = hasSub(sub);
@@ -147,7 +172,7 @@ export default function App({ defaultLang }) {
         },
         [hasSub, copySubs, setSubtitle, newSub],
     );
-
+    //在播放视频显示字幕的位置上点击可以拆分字幕
     const splitSub = useCallback(
         (sub, start) => {
             const index = hasSub(sub);
@@ -187,7 +212,7 @@ export default function App({ defaultLang }) {
         (event) => {
             const keyCode = getKeyCode(event);
             switch (keyCode) {
-                case 32:
+                case KeyCode.KEY_SPACE:
                     event.preventDefault();
                     if (player) {
                         if (playing) {
@@ -197,7 +222,7 @@ export default function App({ defaultLang }) {
                         }
                     }
                     break;
-                case 90:
+                case KeyCode.KEY_Z:
                     event.preventDefault();
                     if (event.metaKey) {
                         undoSubs();
@@ -214,38 +239,23 @@ export default function App({ defaultLang }) {
         window.addEventListener('keydown', onKeyDown);
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [onKeyDown]);
-
+    // 通过字幕的播放时间和当前播放进度的时间选中当前高亮字幕
     useMemo(() => {
         const currentIndex = subtitle.findIndex((item) => item.startTime <= currentTime && item.endTime > currentTime);
         setCurrentIndex(currentIndex);
     }, [currentTime, subtitle]);
 
     useEffect(() => {
-        const localSubtitleString = window.localStorage.getItem('subtitle');
-        const fetchSubtitle = () =>
-            fetch('/sample.json')
-                .then((res) => res.json())
-                .then((res) => {
-                    setSubtitleOriginal(res.map((item) => new Sub(item)));
-                });
-
-        if (localSubtitleString) {
-            try {
-                const localSubtitle = JSON.parse(localSubtitleString);
-                if (localSubtitle.length) {
-                    setSubtitleOriginal(localSubtitle.map((item) => new Sub(item)));
-                } else {
-                    fetchSubtitle();
-                }
-            } catch (error) {
-                fetchSubtitle();
-            }
-        } else {
-            fetchSubtitle();
-        }
-    }, [setSubtitleOriginal]);
+        if (!player) return;
+        const subtitleEle = player.template.$subtitle;
+        if (subtitle[currentIndex]) subtitleEle.innerHTML = renderSubtitle(config, subtitle[currentIndex]);
+        else subtitleEle.innerHTML = '';
+    }, [currentIndex, subtitle, player, config]);
 
     const props = {
+        url,
+        poster,
+        audio,
         player,
         setPlayer,
         subtitle,
@@ -264,6 +274,8 @@ export default function App({ defaultLang }) {
         setLoading,
         setProcessing,
         subtitleHistory,
+        config,
+        setConfig,
 
         notify,
         newSub,
@@ -280,11 +292,13 @@ export default function App({ defaultLang }) {
     };
 
     return (
-        <div className='app'>
+        <div id='sub-player' className='app'>
             <div className="main">
-                <Player {...props} />
+                <div className='content'>
+                    <Player {...props} />
+                    <Tabs {...props} />
+                </div>
                 <Subtitles {...props} />
-                <Tool {...props} />
             </div>
             <Footer {...props} />
             {loading ? <Loading loading={loading} /> : null}
@@ -292,4 +306,5 @@ export default function App({ defaultLang }) {
             <NotificationSystem ref={notificationSystem} allowHTML={true} />
         </div>
     );
-}
+})
+export default App;

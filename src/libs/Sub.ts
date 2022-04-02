@@ -1,6 +1,7 @@
 import clamp from 'lodash/clamp';
 import DT from 'duration-time-conversion';
 
+//字幕类
 export default class Sub {
     start: string;
     end: string;

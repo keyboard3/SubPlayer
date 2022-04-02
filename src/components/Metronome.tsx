@@ -12,7 +12,11 @@ function findIndex(subs, startTime) {
         );
     });
 }
-
+/**
+ * 拖拽时间轴创建新字幕的工具
+ * @param param0
+ * @returns 
+ */
 export default function Component({ render, subtitle, newSub, addSub, player, playing }) {
     const [isDroging, setIsDroging] = useState(false);
     const [drogStartTime, setDrogStartTime] = useState(0);
@@ -29,6 +33,7 @@ export default function Component({ render, subtitle, newSub, addSub, player, pl
     const onMouseDown = useCallback(
         (event) => {
             if (event.button !== 0) return;
+            console.log("Metronome onMouseDown")
             const clickTime = getEventTime(event);
             setIsDroging(true);
             setDrogStartTime(clickTime);
@@ -71,7 +76,6 @@ export default function Component({ render, subtitle, newSub, addSub, player, pl
         document.addEventListener('mouseup', onDocumentMouseUp);
         return () => document.removeEventListener('mouseup', onDocumentMouseUp);
     }, [onDocumentMouseUp]);
-
     return (
         <div className='metronome' onMouseDown={onMouseDown} onMouseMove={onMouseMove}>
             {player && !playing && drogStartTime && drogEndTime && drogEndTime > drogStartTime ? (
