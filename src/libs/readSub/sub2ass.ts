@@ -45,7 +45,7 @@ function hexCovert(hex: string) {
     var c;
     if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
         c = hex.substring(1).split('');
-        return "00" + c[4] + c[5] + c[2] + c[3] + c[1] + [0];
+        return "00" + c[4] + c[5] + c[2] + c[3] + c[0] + c[1];
     }
     return hex;
 }

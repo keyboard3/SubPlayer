@@ -1,11 +1,12 @@
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
-module.exports = {
-  mode: "development",
+import path from "path";
+import webpack from "webpack";
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyPlugin from "copy-webpack-plugin";
+const isProduction = process.env.NODE_ENV != "development";
+const config: webpack.Configuration & { devServer: any } = {
+  mode: isProduction ? "production" : "development",
   entry: {
-    app: "./src/index.tsx"
+    app: "./src/index"
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -16,9 +17,9 @@ module.exports = {
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin',
       'Cross-Origin-Embedder-Policy': 'require-corp',
-    },
+    } as any,
   },
-  devtool: 'source-map',
+  devtool: isProduction ? false : "source-map",
   resolve: {
     fallback: {
       "@ffmpeg/ffmpeg": false
@@ -60,3 +61,5 @@ module.exports = {
     }),
   ],
 }
+
+export default config;

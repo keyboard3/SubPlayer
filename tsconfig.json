@@ -2,11 +2,13 @@
     "compilerOptions": {
         "outDir": "./dist/",
         "noImplicitAny": false,
-        "module": "es6",
+        "module": "commonjs",
+        "sourceMap": true,
         "target": "es5",
         "jsx": "react",
         "allowJs": true,
         "moduleResolution": "node",
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "typeRoots": ["./node_modules/@types/", "typing"]
     }
