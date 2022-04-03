@@ -15,6 +15,7 @@ export default function Header({
     player,
     waveform,
     newSub,
+    config,
     undoSubs,
     clearSubs,
     language,
@@ -71,7 +72,7 @@ export default function Header({
                     text = sub2srt(subtitle);
                     break;
                 case 'ass':
-                    text = sub2ass(subtitle);
+                    text = sub2ass(subtitle, config);
                     break;
                 case 'txt':
                     text = sub2txt(subtitle);
@@ -85,7 +86,7 @@ export default function Header({
             const url = URL.createObjectURL(new Blob([text]));
             download(url, name);
         },
-        [subtitle],
+        [subtitle, config],
     );
 
     const onTranslate = useCallback(() => {
@@ -165,6 +166,7 @@ export function TopTool({
     clearSubs,
     language,
     subtitle,
+    config,
     setLoading,
     formatSub,
     setSubtitle,
@@ -199,7 +201,7 @@ export function TopTool({
                 await fetchFile(videoFile || 'sample.mp4'),
             );
             setLoading(t('LOADING_SUB'));
-            const subtitleFile = new File([new Blob([sub2ass(subtitle)])], 'subtitle.ass');
+            const subtitleFile = new File([new Blob([sub2ass(subtitle, config)])], 'subtitle.ass');
             ffmpeg.FS('writeFile', subtitleFile.name, await fetchFile(subtitleFile));
             setLoading('');
             notify({
@@ -232,7 +234,7 @@ export function TopTool({
                 level: 'error',
             });
         }
-    }, [notify, setProcessing, setLoading, videoFile, subtitle]);
+    }, [notify, setProcessing, setLoading, videoFile, subtitle, config]);
     const decodeAudioData = useCallback(
         async (file) => {
             try {
@@ -277,28 +279,28 @@ export function TopTool({
             //     const ext = getExt(file.name);
             //     const canPlayType = player.canPlayType(file.type);
             //     if (canPlayType === 'maybe' || canPlayType === 'probably') {
-                    setVideoFile(file);
-                    decodeAudioData(file);
-                    const url = URL.createObjectURL(new Blob([file]));
-                    waveform.decoder.destroy();
-                    waveform.drawer.update();
-                    waveform.seek(0);
-                    player.currentTime = 0;
-                    clearSubs();
-                    setSubtitle([
-                        newSub({
-                            start: '00:00:00.000',
-                            end: '00:00:01.000',
-                            text: t('SUB_TEXT'),
-                        }),
-                    ]);
-                    player.url = url;
-                // } else {
-                //     notify({
-                //         message: `${t('VIDEO_EXT_ERR')}: ${file.type || ext}`,
-                //         level: 'error',
-                //     });
-                // }
+            setVideoFile(file);
+            decodeAudioData(file);
+            const url = URL.createObjectURL(new Blob([file]));
+            waveform.decoder.destroy();
+            waveform.drawer.update();
+            waveform.seek(0);
+            player.currentTime = 0;
+            clearSubs();
+            setSubtitle([
+                newSub({
+                    start: '00:00:00.000',
+                    end: '00:00:01.000',
+                    text: t('SUB_TEXT'),
+                }),
+            ]);
+            player.url = url;
+            // } else {
+            //     notify({
+            //         message: `${t('VIDEO_EXT_ERR')}: ${file.type || ext}`,
+            //         level: 'error',
+            //     });
+            // }
             // }
         },
         [newSub, notify, player, setSubtitle, waveform, clearSubs, decodeAudioData],
