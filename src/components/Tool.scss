@@ -206,6 +206,10 @@
   height: 40px;
   border-bottom: 1px solid rgb(0, 0, 0);
   background-color: rgb(28, 31, 47);
+  .Header-link {
+    background-color: white;
+    padding: 0 5px;
+  }
   .btn {
     position: relative;
     opacity: 0.85;

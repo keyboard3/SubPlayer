@@ -29,7 +29,7 @@ export default (props: LocalProps & any) => {
         <div className='tabs-item'>
           <div className='item-title'>英文字幕:</div>
           <SubtitleBox {...props} />
-          <ColorBox {...props} label={'文字颜色'} propertyKey={'primaryColor'} />
+          <ColorBox {...props} label={'颜色'} propertyKey={'primaryColor'} />
           <FontSize {...props} />
           <WordSpace {...props} />
           <BottomDistance {...props} />
@@ -37,7 +37,7 @@ export default (props: LocalProps & any) => {
         <div className='tabs-item'>
           <div className='item-title'>中文字幕:</div>
           <SecondarySubtitleBox {...props} />
-          <ColorBox  {...props} label={'文字颜色'} propertyKey={'secondaryColor'} />
+          <ColorBox  {...props} label={'颜色'} propertyKey={'secondaryColor'} />
           <SecondaryFontSize {...props} />
         </div>
       </div>
