@@ -4,7 +4,7 @@
 
 ## Homepage
 
-[https://keyboard3.com/sub-player/](https://keyboard3.com/sub-player/)
+[https://keyboard3.com/subplayer/](https://keyboard3.com/subplayer/)
 ![Screenshot](./public/screenshot.png)
 
 ## License
