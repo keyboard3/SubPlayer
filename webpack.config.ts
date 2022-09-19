@@ -11,6 +11,7 @@ const config: webpack.Configuration & { devServer: any } = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    publicPath: "/sub-player",
     clean: true
   },
   devServer: {
