@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service  #该配置的类型，咱们应用的是 Service 服务类型
+metadata:
+  name: ${PROJECT_NAME}  #该服务类型的名称
+spec:
+  selector:    #选中的app部署实例
+    app: ${PROJECT_NAME} #为该Deployment设置key为app，value为nginx的标签
+  ports:  #裸露的端口
+  - protocol: TCP  # 走得tcp 协定
+    port: 80 #默认端口
+    targetPort: 3000 #内建服务端口

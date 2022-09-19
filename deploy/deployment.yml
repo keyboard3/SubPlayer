@@ -1,0 +1,22 @@
+apiVersion: apps/v1    #与k8s集群版本无关，应用 kubectl api-versions 即可查看以后集群反对的版本
+kind: Deployment    #该配置的类型，咱们应用的是 Deployment
+metadata:            #译名为元数据，即 Deployment 的一些根本属性和信息
+  name: ${PROJECT_NAME}    #Deployment 的名称
+  labels:        #标签，能够灵便定位一个或多个资源，其中key和value均可自定义，能够定义多组，目前不须要了解
+    app: ${PROJECT_NAME}    #为该Deployment设置key为app，value为nginx的标签
+spec:            #这是对于该Deployment的形容，能够了解为你期待该Deployment在k8s中如何应用
+  replicas: 1    #应用该Deployment创立一个应用程序实例
+  selector:        #标签选择器，与下面的标签独特作用，目前不须要了解
+    matchLabels: #抉择蕴含标签app:nginx的资源
+      app: ${PROJECT_NAME}
+  template:        #这是抉择或创立的Pod的模板
+    metadata:    #Pod的元数据
+      labels:    #Pod的标签，下面的selector即抉择蕴含标签app:nginx的Pod
+        app: ${PROJECT_NAME}
+    spec:        #冀望Pod实现的性能（即在pod中部署）
+      containers:    #生成container，与docker中的container是同一种
+      - name: ${PROJECT_NAME}    #container的名称
+        image: keyboard3/${PROJECT_NAME}:latest    #应用镜像nginx创立container，
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80   #外部服务裸露的端口
