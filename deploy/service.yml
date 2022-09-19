@@ -8,4 +8,4 @@ spec:
   ports:  #裸露的端口
   - protocol: TCP  # 走得tcp 协定
     port: 80 #默认端口
-    targetPort: 3000 #内建服务端口
+    targetPort: 80 #内建服务端口
