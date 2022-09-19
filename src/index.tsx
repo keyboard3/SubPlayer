@@ -20,7 +20,7 @@ function Editor() {
         //会缓存获取的demo字幕
         const localSubtitleString = window.localStorage.getItem('subtitle');
         const fetchSubtitle = () =>
-            fetch('sample.json')
+            fetch('/sub-player/sample.json')
                 .then((res) => res.json())
                 .then((res) => {
                     setSubtitleOriginal(res);
@@ -44,8 +44,8 @@ function Editor() {
     return (
         <SubPlayerEditor
             ref={ref}
-            url={"sample.mp4"}
-            audio={"sample.mp3"}
+            url={"/sub-player/sample.mp4"}
+            audio={"/sub-player/sample.mp3"}
             subtitles={subtitle}
             config={config}
             onSubtitleChange={(subtitle) => {
